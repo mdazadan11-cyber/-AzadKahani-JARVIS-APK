@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#070e0b">
+<title>AZ - आज़ाद कहानी बुक</title>
+<style>
+  :root { --bg: #070e0b; --card: #101e19; --gold: #d4af37; --gold-lt: #fcf0c8; --text: #fff; --muted: #9eb3aa; --border: rgba(212, 175, 55, 0.35); }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 85px; }
+  .az-ring { width: 88px; height: 88px; margin: 0 auto 12px; border-radius: 50%; border: 2.5px solid var(--gold); display: flex; align-items: center; justify-content: center; background: #14261f; box-shadow: 0 0 20px rgba(212,175,55,0.5); }
+  .az-badge { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--gold); background: #162b23; color: var(--gold); font-weight: 900; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+  #welcomeGate { position: fixed; inset: 0; background: #040907; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 18px; }
+  .gate-box { background: var(--card); border: 1.5px solid var(--gold); border-radius: 20px; padding: 22px; width: 100%; max-width: 360px; text-align: center; }
+  .perm-box { text-align: left; background: #08110e; border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin: 12px 0; font-size: 12px; color: var(--gold-lt); line-height: 1.7; }
+  .header { display: flex; justify-content: space-between; align-items: center; padding: 11px 14px; background: #0b1612; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .top-btn { background: var(--card); border: 1px solid var(--border); color: var(--gold); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+  .tab-view { display: none; padding: 14px; }
+  .tab-view.active { display: block; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  .sec-head { color: var(--gold-lt); font-size: 15px; margin: 12px 0 8px; font-weight: bold; border-left: 3px solid var(--gold); padding-left: 8px; }
+  .btn-gold { background: var(--gold); color: #000; border: none; padding: 11px 15px; border-radius: 9px; font-weight: bold; cursor: pointer; font-size: 13px; }
+  .book-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; }
+  .book-item { min-width: 150px; background: #14251f; border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; flex-shrink: 0; text-align: center; }
+  #reelReaderModal { display: none; position: fixed; inset: 0; background: #050a08; z-index: 500; flex-direction: column; }
+  .reader-top { padding: 12px 15px; background: #0c1814; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gold); }
+  .reel-scroll { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; }
+  .reel-page { height: calc(100vh - 55px); scroll-snap-align: start; padding: 25px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-bottom: 1px dashed var(--border); }
+  .ar-txt { font-size: 24px; color: var(--gold); line-height: 1.8; margin-bottom: 14px; font-weight: bold; direction: rtl; }
+  .hi-txt { font-size: 16px; color: #fff; line-height: 1.7; }
+  .ad-ticker { height: 72px; background: #1a2414; border: 1.5px solid var(--gold); border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; }
+  .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .shop-card { background: #101e19; border: 1px solid var(--border); border-radius: 12px; padding: 10px; text-align: center; }
+  .mini-fab { position: fixed; bottom: 86px; right: 16px; width: 46px; height: 46px; background: var(--gold); color: #000; border-radius: 50%; border: none; font-size: 24px; font-weight: bold; z-index: 95; cursor: pointer; }
+  .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 66px; background: #0a1410; border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+  .nav-btn { display: flex; flex-direction: column; align-items: center; color: var(--muted); font-size: 11px; cursor: pointer; }
+  .nav-btn.active { color: var(--gold); font-weight: bold; }
+  .jabiya-orb { width: 58px; height: 58px; border-radius: 50%; background: #1a3b30; border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--gold); margin-top: -22px; }
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 400; align-items: center; justify-content: center; padding: 18px; }
+  .modal-card { background: var(--card); border: 1px solid var(--gold); border-radius: 16px; padding: 18px; width: 100%; max-width: 370px; max-height: 85vh; overflow-y: auto; }
+  input, textarea, select { width: 100%; padding: 10px; background: #08100d; border: 1px solid var(--border); color: #fff; border-radius: 8px; margin: 6px 0; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div id="welcomeGate">
+  <div class="gate-box">
+    <div class="az-ring"><span style="font-size:34px; font-weight:900; color:#d4af37;">AZ</span></div>
+    <h2 style="color:var(--gold); margin-bottom:4px;">आज़ाद कहानी बुक</h2>
+    <p style="font-size:12px; color:var(--muted);">भाषा चुनें और नीचे बटन दबाकर ऐप खोलें:</p>
+    <select id="gateLangSelect">
+      <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+      <option value="ur">🇵🇰🇮🇳 اردو (Urdu)</option>
+      <option value="ar">🇸🇦 العربية (Arabic)</option>
+      <option value="mr">🇮🇳 मराठी (Marathi)</option>
+      <option value="en">🌍 English</option>
+    </select>
+    <div class="perm-box">
+      <div>📷 कैमरा व गैलरी अनुमति</div>
+      <div>📍 लाइव लोकेशन (Shop GPS)</div>
+      <div>🎙️ जाबिया AI माइक्रोफ़ोन</div>
+      <div>🔔 नोटिफिकेशन व अनलिमिटेड स्टोरेज</div>
+    </div>
+    <button type="button" class="btn-gold" style="width:100%; padding:13px;" onclick="document.getElementById('welcomeGate').style.display='none'; initApp();">सभी अनुमतियाँ दें और ऐप खोलें (Allow All) ✓</button>
+  </div>
+</div>
+
+<div class="header">
+  <div style="display:flex; align-items:center; gap:8px;">
+    <div class="az-badge">AZ</div>
+    <span style="font-size:15px; font-weight:bold; color:var(--gold);" id="hdrTitle">आज़ाद कहानी बुक</span>
+  </div>
+  <div style="display:flex; gap:6px;">
+    <div class="top-btn" onclick="openModal('writeShayariModal')">✍️</div>
+    <div class="top-btn" onclick="openAdmin()">👑</div>
+    <div class="top-btn" onclick="switchTab('settings')">⚙️</div>
+  </div>
+</div>
+
+<div id="view-home" class="tab-view active">
+  <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:10px;">
+    <button class="btn-gold" style="padding:5px 10px; font-size:11px;" onclick="renderShayari('all')">सभी शायर</button>
+    <button class="btn-gold" style="padding:5px 10px; font-size:11px;" onclick="renderShayari('मिर्ज़ा ग़ालिब')">ग़ालिब</button>
+    <button class="btn-gold" style="padding:5px 10px; font-size:11px;" onclick="renderShayari('अल्लामा इक़बाल')">इक़बाल</button>
+    <button class="btn-gold" style="padding:5px 10px; font-size:11px;" onclick="renderShayari('जॉन एलिया')">जॉन एलिया</button>
+    <button class="btn-gold" style="padding:5px 10px; font-size:11px;" onclick="renderShayari('राहत इंदौरी')">राहत इंदौरी</button>
+  </div>
+  <div id="shayariFeed"></div>
+</div>
+
+<div id="view-books" class="tab-view">
+  <div class="sec-head">1. सीरत-उन-नबी ﷺ (मुकम्मल जीवनी)</div>
+  <div class="book-row">
+    <div class="book-item" onclick="openBook('seerat')"><div style="font-size:30px;">📘</div><h4>हमारे नबी ﷺ की जीवनी</h4></div>
+    <div class="book-item" onclick="openBook('bukhari')"><div style="font-size:30px;">📖</div><h4>सहीह बुख़ारी</h4></div>
+  </div>
+  <div class="sec-head">2. क़ुरआन-ए-पाक (मुकम्मल अरबी व हिंदी)</div>
+  <div class="book-row">
+    <div class="book-item" onclick="openBook('quran')"><div style="font-size:30px;">📗</div><h4>सूरह अल-फ़ातिहा</h4></div>
+    <div class="book-item" onclick="openBook('ambiya')"><div style="font-size:30px;">📜</div><h4>क़ससुल अंबिया</h4></div>
+  </div>
+  <div class="sec-head">3. महान हस्तियाँ व साइंटिस्ट</div>
+  <div class="book-row">
+    <div class="book-item" onclick="openBook('kalam')"><div style="font-size:30px;">🚀</div><h4>डॉ. ए.पी.जे. अब्दुल कलाम</h4></div>
+  </div>
+</div>
+
+<div id="view-youtube" class="tab-view">
+  <div class="card">
+    <h3 style="color:var(--gold); margin-bottom:8px;">▶️ अपना YouTube (देखें व अपलोड करें)</h3>
+    <div style="display:flex; gap:6px; margin-bottom:10px;">
+      <input type="text" id="ytQuery" placeholder="YouTube वीडियो खोजें..." style="margin:0;">
+      <button class="btn-gold" onclick="searchYt()">खोजें</button>
+    </div>
+    <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:10px; border:1px solid var(--gold); margin-bottom:10px;">
+      <iframe id="ytFrame" style="position:absolute; top:0; left:0; width:100%; height:100%;" src="https://youtube.com" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <button class="btn-gold" onclick="window.open('https://youtube.com', '_blank')">YouTube खोलें ↗</button>
+      <button class="btn-gold" style="background:#d32f2f; color:#fff;" onclick="window.open('https://youtube.com', '_blank')">📤 अपलोड करें</button>
+    </div>
+  </div>
+</div>
