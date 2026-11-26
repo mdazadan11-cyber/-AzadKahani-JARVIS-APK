@@ -124,3 +124,179 @@
     </div>
   </div>
 </div>
+  </div>
+  <div id="shayariFeed"></div>
+</div>
+
+<!-- 2. किताबें -->
+<div id="view-books" class="tab-view">
+  <div class="sec-head">1. सीरत-उन-नबी ﷺ (मुकम्मल जीवनी)</div>
+  <div class="book-row">
+    <div class="book-item" onclick="openBook('seerat')"><div style="font-size:30px;">📘</div><h4>हमारे नबी ﷺ की जीवनी</h4></div>
+    <div class="book-item" onclick="openBook('bukhari')"><div style="font-size:30px;">📖</div><h4>सहीह बुख़ारी</h4></div>
+  </div>
+  <div class="sec-head">2. क़ुरआन-ए-पाक (मुकम्मल अरबी व हिंदी)</div>
+  <div class="book-row">
+    <div class="book-item" onclick="openBook('quran')"><div style="font-size:30px;">📗</div><h4>सूरह अल-फ़ातिहा</h4></div>
+    <div class="book-item" onclick="openBook('ambiya')"><div style="font-size:30px;">📜</div><h4>क़ससुल अंबिया</h4></div>
+  </div>
+  <div class="sec-head">3. महान हस्तियाँ व साइंटिस्ट</div>
+  <div class="book-row">
+    <div class="book-item" onclick="openBook('kalam')"><div style="font-size:30px;">🚀</div><h4>डॉ. ए.पी.जे. अब्दुल कलाम</h4></div>
+  </div>
+</div>
+
+<!-- 3. YouTube -->
+<div id="view-youtube" class="tab-view">
+  <div class="card">
+    <h3 style="color:var(--gold); margin-bottom:8px;">▶️ अपना YouTube (देखें व अपलोड करें)</h3>
+    <div style="display:flex; gap:6px; margin-bottom:10px;">
+      <input type="text" id="ytQuery" placeholder="YouTube वीडियो खोजें..." style="margin:0;">
+      <button class="btn-gold" onclick="searchYt()">खोजें</button>
+    </div>
+    <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:10px; border:1px solid var(--gold); margin-bottom:10px;">
+      <iframe id="ytFrame" style="position:absolute; top:0; left:0; width:100%; height:100%;" src="https://youtube.com" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <button class="btn-gold" onclick="window.open('https://youtube.com', '_blank')">YouTube खोलें ↗</button>
+      <button class="btn-gold" style="background:#d32f2f; color:#fff;" onclick="window.open('https://youtube.com', '_blank')">📤 अपलोड करें</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. दुकान -->
+<div id="view-shop" class="tab-view">
+  <div class="ad-ticker">
+    <div>
+      <span style="background:var(--gold); color:#000; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:bold;">प्रचार स्क्रीन</span>
+      <h4 style="color:var(--gold-lt); margin-top:4px;">अली इलेक्ट्रॉनिक्स & मोबाइल</h4>
+      <p style="font-size:11px; color:var(--muted);">Cash on Delivery • तेज़ डिलीवरी!</p>
+    </div>
+    <span style="font-size:24px;">📢</span>
+  </div>
+  <div class="sec-head">सुरक्षित बाज़ार (Noon / Temu स्टाइल)</div>
+  <div class="shop-grid" id="shopGrid"></div>
+</div>
+
+<!-- 5. एडमिन डैशबोर्ड -->
+<div id="view-admin" class="tab-view">
+  <div class="sec-head" style="color:#ff9800;">👑 मालिक का डैशबोर्ड</div>
+  <div class="card" style="border-color:#ff9800;">
+    <h4 style="color:#ff9800; margin-bottom:6px;">🛠️ इंजीनियर जाबिया AI</h4>
+    <p id="adminLog" style="font-size:12px; color:var(--gold-lt); margin-bottom:8px;">"हाँ जी सर! डैशबोर्ड और अनलिमिटेड स्टोरेज ऑनलाइन है।"</p>
+    <input type="text" id="adminCmd" placeholder="इंजीनियर जाबिया को आदेश दें...">
+    <button class="btn-gold" style="width:100%; background:#ff9800;" onclick="runAdminCmd()">आदेश भेजें</button>
+  </div>
+</div>
+
+<!-- 6. सेटिंग्स -->
+<div id="view-settings" class="tab-view">
+  <div class="sec-head">🌐 भाषा और आवाज़ सेटिंग्स</div>
+  <div class="card">
+    <h4>भाषा बदलें</h4>
+    <select id="setLang" onchange="applyLang(this.value)">
+      <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+      <option value="ur">🇵🇰🇮🇳 اردو (Urdu)</option>
+      <option value="ar">🇸🇦 العربية (Arabic)</option>
+      <option value="mr">🇮🇳 मराठी (Marathi)</option>
+      <option value="en">🌍 English</option>
+    </select>
+  </div>
+  <div class="card">
+    <h4>🎙️ जाबिया AI की आवाज़</h4>
+    <select id="voiceGender">
+      <option value="female">👩 लड़की की साफ आवाज़</option>
+      <option value="male">👨 लड़के की साफ आवाज़</option>
+    </select>
+  </div>
+</div>
+
+<button id="plusFab" class="mini-fab" onclick="handlePlus()">+</button>
+
+<div class="bottom-nav">
+  <div class="nav-btn active" id="nb-home" onclick="switchTab('home', this)"><span>🏠</span><span>होम</span></div>
+  <div class="nav-btn" id="nb-books" onclick="switchTab('books', this)"><span>📚</span><span>किताब</span></div>
+  <div class="nav-btn" onclick="openModal('jabiyaModal'); speak('हाँ जी सर, बताइए क्या हुक्म है?');"><div class="jabiya-orb">🎙️</div><span style="color:var(--gold); font-weight:bold;">जाबिया</span></div>
+  <div class="nav-btn" id="nb-youtube" onclick="switchTab('youtube', this)"><span>▶️</span><span>YouTube</span></div>
+  <div class="nav-btn" id="nb-shop" onclick="switchTab('shop', this)"><span>🏪</span><span>दुकान</span></div>
+</div>
+
+<div id="reelReaderModal">
+  <div class="reader-top">
+    <span id="bookTitle" style="color:var(--gold); font-weight:bold;">किताब</span>
+    <div style="display:flex; gap:6px;">
+      <button class="btn-gold" style="padding:4px 10px; font-size:11px;" onclick="speak(currentBookText)">🔊 पढ़ें</button>
+      <button class="btn-gold" style="padding:4px 10px; font-size:11px; background:#333; color:#fff;" onclick="document.getElementById('reelReaderModal').style.display='none'; speechSynthesis.cancel();">✕</button>
+    </div>
+  </div>
+  <div class="reel-scroll" id="bookPages"></div>
+</div>
+
+<div id="jabiyaModal" class="modal">
+  <div class="modal-card" style="text-align:center;">
+    <h3 style="color:var(--gold);">🎙️ जाबिया AI</h3>
+    <p style="margin:10px 0; font-size:14px;">"हाँ जी सर, बताइए क्या खोलूँ या क्या पढ़कर सुनाऊँ?"</p>
+    <input type="text" id="jabiyaCmd" placeholder="जैसे: 'क़ुरआन खोलो' / 'दुकान खोलो' / 'यूट्यूब'...">
+    <button class="btn-gold" style="width:100%;" onclick="runJabiya()">भेजें</button>
+    <button class="btn-gold" style="width:100%; background:#333; color:#fff; margin-top:6px;" onclick="closeModal('jabiyaModal')">बंद करें</button>
+  </div>
+</div>
+
+<div id="orderModal" class="modal">
+  <div class="modal-card">
+    <p style="font-size:11px; color:#81c784; text-align:center; margin-bottom:6px;">🔒 दुकानदार की निजी व बैंक जानकारी सुरक्षित है</p>
+    <h3 id="ordShop" style="color:var(--gold); text-align:center;">दुकान</h3>
+    <p id="ordProd" style="text-align:center; margin:6px 0;"></p>
+    <input type="text" id="ordAddr" placeholder="अपना डिलीवरी पता और मोबाइल नंबर लिखें...">
+    <select><option>💵 Cash on Delivery (सामान मिलने पर पैसे दें)</option><option>💳 Online Payment</option></select>
+    <button class="btn-gold" style="width:100%;" onclick="alert('✅ आपका ऑर्डर पक्का हो गया है!'); closeModal('orderModal');">ऑर्डर पक्का करें ✓</button>
+    <button class="btn-gold" style="width:100%; background:#333; color:#fff; margin-top:6px;" onclick="closeModal('orderModal')">बंद करें</button>
+  </div>
+</div>
+
+<div id="shopModal" class="modal">
+  <div class="modal-card">
+    <h3 style="color:var(--gold); margin-bottom:6px;">🏪 नई दुकान खोलें</h3>
+    <label class="btn-gold" style="display:block; text-align:center; margin-bottom:6px;">📷 दुकान की फोटो खींचें<input type="file" accept="image/*" capture="environment" style="display:none;"></label>
+    <input type="text" id="sName" placeholder="दुकान का नाम">
+    <input type="text" id="sProd" placeholder="प्रोडक्ट व कीमत (जैसे: घड़ी ₹999)">
+    <input type="text" id="sLoc" placeholder="लोकेशन (शहर)">
+    <input type="password" placeholder="🔒 बैंक खाता / UPI (ग्राहकों से छुपा रहेगा)">
+    <button class="btn-gold" style="width:100%;" onclick="addShop()">लाइव करें</button>
+    <button class="btn-gold" style="width:100%; background:#333; color:#fff; margin-top:6px;" onclick="closeModal('shopModal')">बंद करें</button>
+  </div>
+</div>
+
+<div id="writeShayariModal" class="modal">
+  <div class="modal-card">
+    <h3 style="color:var(--gold); margin-bottom:6px;">✍️ शायरी या पोस्ट लिखें</h3>
+    <label class="btn-gold" style="display:block; text-align:center; margin-bottom:6px;">📷 कैमरा / गैलरी से फोटो चुनें<input type="file" accept="image/*" style="display:none;"></label>
+    <textarea id="shTxt" rows="3" placeholder="यहाँ अपनी शायरी लिखें..."></textarea>
+    <button class="btn-gold" style="width:100%;" onclick="addShayari()">पोस्ट करें</button>
+    <button class="btn-gold" style="width:100%; background:#333; color:#fff; margin-top:6px;" onclick="closeModal('writeShayariModal')">बंद करें</button>
+  </div>
+</div>
+
+<script>
+  let curTab = 'home';
+  let currentBookText = "";
+
+  const shayaris = [
+    { p: "मिर्ज़ा ग़ालिब", t: "हज़ारों ख़्वाहिशें ऐसी कि हर ख़्वाहिश पे दम निकले,\nबहुत निकले मेरे अरमान लेकिन फिर भी कम निकले।" },
+    { p: "अल्लामा इक़बाल", t: "ख़ुदी को कर बुलंद इतना कि हर तक़दीर से पहले,\nख़ुदा बंदे से ख़ुद पूछे बता तेरी रज़ा क्या है।" },
+    { p: "जॉन एलिया", t: "कितनी दिलकश हो तुम कितना दिल-जू हूँ मैं,\nक्या सितम है कि हम लोग मर जाएँगे।" },
+    { p: "राहत इंदौरी", t: "बुलाती है मगर जाने का नहीं,\nये दुनिया है इधर जाने का नहीं।" }
+  ];
+
+  const shops = [
+    { n: "अली इलेक्ट्रॉनिक्स", p: "स्मार्टफ़ोन ₹14,999", l: "रियाद / दिल्ली" },
+    { n: "नूर गारमेंट्स", p: "शाही कुर्ता ₹1,299", l: "मुंबई / जेद्दाह" },
+    { n: "मदीना इत्र हाउस", p: "अरबी ऊद ₹799", l: "लखनऊ" },
+    { n: "आज़ाद बुक डिपो", p: "किताब सेट ₹499", l: "हैदराबाद" }
+  ];
+
+  const books = {
+    quran: { title: "क़ुरआन-ए-पाक: सूरह अल-फ़ातिहा", pages: [
+      { ar: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴿١﴾", hi: "शुरू अल्लाह के नाम से जो बड़ा मेहरबान निहायत रहम वाला है।" },
+      { ar: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ﴿٢﴾", hi: "तमाम तारीफ़ें अल्लाह ही के लिए हैं जो तमाम जहानों का पालने वाला है।" },
+      { ar: "الرَّحْمَٰنِ الرَّحِيمِ ﴿٣﴾ مَالِكِ يَوْمِ الدِّينِ ﴿٤﴾", hi: "बड़ा मेहरबान निहायत रहम वाला, इंसाफ़ के दिन का मालिक है।" },
