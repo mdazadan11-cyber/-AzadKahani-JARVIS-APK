@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>आज़ाद कहानी बुक - सुपर ऐप</title>
+<style>
+  :root {
+    --bg: #070e0b; --card: #101e19; --gold: #d4af37; --gold-lt: #f9eab8;
+    --text: #ffffff; --muted: #9eb3aa; --border: rgba(212, 175, 55, 0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; -webkit-user-select: none; user-select: none; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 85px; overflow-x: hidden; }
+
+  /* स्क्रीनशॉट और कॉपी सुरक्षा */
+  @media print { body { display: none !important; } }
+  .secure-blur { filter: blur(12px); pointer-events: none; }
+
+  /* वेलकम भाषा और परमिशन गेट */
+  #welcomeGate {
+    position: fixed; inset: 0; background: rgba(4, 9, 7, 0.98); z-index: 999;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .gate-box {
+    background: var(--card); border: 1.5px solid var(--gold); border-radius: 20px;
+    padding: 25px; width: 100%; max-width: 370px; text-align: center;
+  }
+
+  /* टॉप हेडर */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 14px; background: #0b1612; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .app-title { font-size: 16px; font-weight: bold; color: var(--gold); }
+  .top-actions { display: flex; gap: 6px; }
+  .top-btn {
+    background: var(--card); border: 1px solid var(--border); color: var(--gold);
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; cursor: pointer; font-size: 14px;
+  }
+
+  /* सेक्शन और कार्ड्स */
+  .tab-view { display: none; padding: 14px; animation: fade 0.25s ease; }
+  .tab-view.active { display: block; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 15px; margin-bottom: 14px; position: relative; overflow: hidden;
+  }
+  .shayari-card {
+    min-height: 210px; display: flex; flex-direction: column; justify-content: space-between;
+    border: 1.5px solid var(--gold); box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  }
+  .sec-head { color: var(--gold-lt); font-size: 15px; margin: 14px 0 10px; font-weight: bold; border-left: 3px solid var(--gold); padding-left: 8px; }
+  .btn-gold { background: var(--gold); color: #000; border: none; padding: 9px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; }
+
+  /* किताब रैक */
+  .book-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+  .book-item {
+    min-width: 150px; background: #14251f; border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px; cursor: pointer; flex-shrink: 0;
+  }
+  .book-cover {
+    height: 95px; border-radius: 8px; background: linear-gradient(135deg, #214035, #0e1d18);
+    display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 8px;
+  }
+
+  /* रील-स्टाइल किताब रीडर */
+  #reelReaderModal {
+    display: none; position: fixed; inset: 0; background: #050a08; z-index: 500; flex-direction: column;
+  }
+  .reader-top {
+    padding: 12px 15px; background: #0c1814; display: flex; justify-content: space-between;
+    align-items: center; border-bottom: 1px solid var(--gold);
+  }
+  .reel-scroll-container { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; }
+  .reel-page {
+    height: calc(100vh - 55px); scroll-snap-align: start; padding: 25px 20px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; border-bottom: 1px dashed var(--border);
+    background: radial-gradient(circle at center, #13261f 0%, #060d0a 100%);
+  }
+  .arabic-text { font-size: 26px; color: var(--gold); line-height: 1.9; margin-bottom: 16px; font-weight: bold; direction: rtl; }
+  .hindi-text { font-size: 17px; color: #fff; line-height: 1.7; max-width: 500px; }
+
+  /* दुकान: 1-इंच प्रचार पट्टी और सुरक्षित बाज़ार */
+  .ad-ticker {
+    height: 75px; background: linear-gradient(90deg, #241b08, #14261f, #241b08);
+    border: 1.5px solid var(--gold); border-radius: 12px; margin-bottom: 15px;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 15px;
+  }
+  .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .shop-board {
+    background: #1a2d26; border: 1px solid var(--gold); border-radius: 8px;
+    padding: 6px; text-align: center; color: var(--gold-lt); font-weight: bold; font-size: 12px; margin-bottom: 8px;
+  }
+
+  /* एडमिन डैशबोर्ड बैज */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .stat-box { background: #0a1410; border: 1px solid var(--gold); border-radius: 10px; padding: 12px; text-align: center; }
+
+  /* छोटा प्लस (+) बटन */
+  .mini-fab {
+    position: fixed; bottom: 88px; right: 18px; width: 46px; height: 46px;
+    background: var(--gold); color: #000; border-radius: 50%; border: none;
+    font-size: 24px; font-weight: bold; box-shadow: 0 4px 14px rgba(212,175,55,0.5);
+    cursor: pointer; z-index: 95; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* बॉटम नेविगेशन + बीच में जाबिया AI */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: 68px;
+    background: #0a1410; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-around; align-items: center; z-index: 100;
+  }
+  .nav-btn { display: flex; flex-direction: column; align-items: center; color: var(--muted); font-size: 11px; cursor: pointer; gap: 3px; }
+  .nav-btn.active { color: var(--gold); font-weight: bold; }
+  .jabiya-wrap { position: relative; top: -16px; text-align: center; cursor: pointer; }
+  .jabiya-orb {
+    width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle, #224d3e, #091410);
+    border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.6);
+  }
+
+  /* मोडल */
+  .modal {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+    z-index: 400; align-items: center; justify-content: center; padding: 18px;
+  }
+  .modal-card {
+    background: var(--card); border: 1px solid var(--gold); border-radius: 16px;
+    padding: 20px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto;
+  }
+  input, textarea, select {
+    width: 100%; padding: 10px; background: #08100d; border: 1px solid var(--border);
+    color: #fff; border-radius: 8px; margin: 8px 0; font-size: 13px; -webkit-user-select: text; user-select: text;
+  }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+  <!-- 1. पहली बार खोलने पर भाषा और परमिशन स्क्रीन -->
+  <div id="welcomeGate">
+    <div class="gate-box">
+      <div style="font-size:38px; margin-bottom:8px;">🕌</div>
+      <h3 style="color:var(--gold); margin-bottom:6px;">आज़ाद कहानी बुक</h3>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">अपनी भाषा और देश चुनें (अनुमति अपने आप सक्रिय हो जाएगी):</p>
+      <select id="gateLangSelect">
+        <option value="hi">🇮🇳 हिन्दी (India - Hindi)</option>
+        <option value="ur">🇵🇰🇮🇳 اردو (Urdu)</option>
+        <option value="ar">🇸🇦 العربية (Saudi Arabia / All Arab Countries)</option>
+        <option value="mr">🇮🇳 मराठी (Maharashtra - Marathi)</option>
+        <option value="bn">🇮🇳🇧🇩 বাংলা (Bengali)</option>
+        <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+        <option value="te">🇮🇳 తెలుగు (Telugu)</option>
+        <option value="gu">🇮🇳 ગુજરાતી (Gujarati)</option>
+        <option value="pa">🇮🇳 ਪੰਜਾਬੀ (Punjabi)</option>
+        <option value="en">🌍 English (Global / UK / USA)</option>
+        <option value="fr">🇫🇷 Français (France)</option>
+        <option value="tr">🇹🇷 Türkçe (Turkey)</option>
+        <option value="id">🇮🇩 Bahasa Indonesia (Indonesia)</option>
+        <option value="ru">🇷🇺 Русский (Russia)</option>
+      </select>
+      <button class="btn-gold" style="width:100%; margin-top:12px; padding:12px;" onclick="grantAccess()">अनुमति दें और ऐप खोलें (Allow) ✓</button>
+    </div>
+  </div>
+
+  <!-- 2. टॉप हेडर -->
+  <div class="header">
+    <div class="app-title" data-k="title">आज़ाद कहानी बुक</div>
+    <div class="top-actions">
+      <div class="top-btn" onclick="openModal('writeShayariModal')" title="शायरी लिखें">✍️</div>
+      <div class="top-btn" onclick="openModal('chatHistoryModal')" title="पिछली चैट">💬</div>
+      <div class="top-btn" onclick="openAdminLogin()" title="मालिक का डैशबोर्ड" style="border-color:#ff9800;">👑</div>
+      <div class="top-btn" onclick="switchTab('settings')" title="सेटिंग्स">⚙️</div>
+    </div>
+  </div>
+
+  <!-- 3. होम टैब (दुनिया के नंबर-1 शायर: मीर, ग़ालिब, इक़बाल से आज तक) -->
+  <div id="view-home" class="tab-view active">
+    <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:10px; margin-bottom:8px;">
+      <button class="btn-gold" style="padding:5px 12px; font-size:11px;" onclick="filterShayar('all')">सभी महान शायर</button>
+      <button class="btn-gold" style="padding:5px 12px; font-size:11px; background:#152620; color:var(--gold); border:1px solid var(--gold);" onclick="filterShayar('मिर्ज़ा ग़ालिब')">मिर्ज़ा ग़ालिब</button>
+      <button class="btn-gold" style="padding:5px 12px; font-size:11px; background:#152620; color:var(--gold); border:1px solid var(--gold);" onclick="filterShayar('अल्लामा इक़बाल')">अल्लामा इक़बाल</button>
+      <button class="btn-gold" style="padding:5px 12px; font-size:11px; background:#152620; color:var(--gold); border:1px solid var(--gold);" onclick="filterShayar('जॉन एलिया')">जॉन एलिया</button>
